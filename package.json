@@ -2,9 +2,13 @@
 	"name": "crafter",
 	"version": "0.0.1",
 	"private": true,
+	"types": "module",
 	"scripts": {
-		"dev": "vite dev",
-		"build": "vite build",
+		"schema:compile": "yarn --cwd ./schema/typescript schema:compile && yarn --cwd ./schema/typescript build && yarn remove @devlog/schema-ts; yarn add ./schema/typescript",
+		"editor:dev": "vite dev",
+		"server:dev": "yarn nodemon --watch src --exec \"tsc\"",
+		"editor:build": "vite build",
+		"server:build": "",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
@@ -15,7 +19,9 @@
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@types/mjml": "^4.7.4",
+		"@types/node": "^22.2.0",
 		"autoprefixer": "^10.4.19",
+		"nodemon": "^3.1.4",
 		"postcss": "^8.4.40",
 		"svelte": "^4.2.7",
 		"svelte-check": "^3.6.0",
@@ -26,8 +32,11 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@connectrpc/connect": "^1.4.0",
+		"@connectrpc/connect-fastify": "^1.4.0",
+		"@devlog/schema-ts": "./schema/typescript",
+		"fastify": "^4.28.1",
 		"google-protobuf": "^3.21.4",
-		"@devlog/schema-nodejs": "./schema/nodejs",
 		"mjml": "^4.15.3"
 	}
 }

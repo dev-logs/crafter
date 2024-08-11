@@ -1,7 +1,8 @@
 import mjml2html from "mjml"
 import type { SvelteComponent } from "svelte"
 import Mail from "../routes/email/welcome/welcome.mail.svelte";
-import schema from "@devlog/schema-nodejs";
+import type { RequestEvent } from "@sveltejs/kit";
+import {CrafterResponse, CrafterRequest} from "@devlog/schema-ts";
 
 const stripSvelteClasses = (html: string) =>
   html.replaceAll(/class="s-[\w-]+"/g, "")
@@ -45,7 +46,7 @@ export interface TemplateForm {
 export const createTemplateForm = (obj: object): TemplateForm => {
   const fields: TemplateFormField[] = Object.keys(obj).map((curr) => {
     return {
-      value: (obj as any)[curr],
+      value: (obj as any)[curr] as string,
       type: TemplateFormFieldType.STRING,
       name: curr
     }
@@ -56,8 +57,8 @@ export const createTemplateForm = (obj: object): TemplateForm => {
   }
 }
 
-export const createActions = (component: any) => ({
-  'render': async ({request}: any) => {
+export const createActions = <T>(component: any, templateClazz: any) => ({
+  'render': async ({ request }: any) => {
     const body = (await request.formData())
     const template: TemplateForm = {
       fields: []
@@ -78,6 +79,24 @@ export const createActions = (component: any) => ({
   }
 })
 
+export const generateTemplateHandler = (component: any) =>
+  async(request: RequestEvent) => {
+      const binary = await request.request.body!.getReader().read()
+      const template = CrafterRequest.fromBinary(binary.value!)
+      const form = createTemplateForm({...template.template.value})
+      const html = renderMjml(component, form)
+      const response = new CrafterResponse({
+        html
+      })
+
+      return new Response(response.toBinary(), {
+          headers: {
+              'Content-Type': 'application/octet-stream',
+              'Content-Disposition': 'attachment; filename="data.bin"'
+          }
+      })
+    }
+
 export const loadTemplate = (template: TemplateForm) => {
   const html = renderMjml(Mail, template)
 
@@ -86,5 +105,3 @@ export const loadTemplate = (template: TemplateForm) => {
     template
   }
 }
-
-

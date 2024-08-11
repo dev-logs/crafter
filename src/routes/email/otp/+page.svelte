@@ -1,6 +1,7 @@
 <script lang="ts">
-    import type {PageData} from "./$types"
-    export let data: PageData
+    import Editor from "../../../components/Editor.svelte";
+    export let data: any
+    export let form: any
 </script>
 
-{@html data.html}
+<Editor data={data} form={form}/>
