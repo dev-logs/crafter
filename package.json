@@ -5,10 +5,8 @@
 	"types": "module",
 	"scripts": {
 		"schema:compile": "yarn --cwd ./schema/typescript schema:compile && yarn --cwd ./schema/typescript build && yarn remove @devlog/schema-ts; yarn add ./schema/typescript",
-		"editor:dev": "vite dev",
-		"server:dev": "yarn nodemon --watch src --exec \"tsc\"",
-		"editor:build": "vite build",
-		"server:build": "",
+		"dev": "vite dev",
+		"build": "vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
