@@ -4,9 +4,6 @@
 </script>
 
 <mj-body>
-  <mj-raw>
-    <!-- Company Header -->
-  </mj-raw>
   <mj-section background-color="#EEE">
     <mj-column>
       <mj-text font-size="15px" color="#000" align="center" font-weight="200">
